@@ -1,7 +1,4 @@
-google-genai
-openai
-anthropic
-python-dotenv
-requests
-pydantic
-rich
+google-genai>=1.0,<2
+openai>=1.66,<3
+python-dotenv>=1.0,<2
+jsonschema>=4.23,<5

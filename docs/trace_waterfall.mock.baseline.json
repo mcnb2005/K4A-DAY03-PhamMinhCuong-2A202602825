@@ -1,0 +1,57 @@
+[
+  {
+    "test_case_id": "TC01",
+    "query": "Chào bạn, bạn có thể giới thiệu quy chế học vụ cơ bản của Đại học VinUni không?",
+    "status": "COMPLETED",
+    "output": "[MOCK] Tôi có thể hướng dẫn chung về tín chỉ, GPA và cố vấn; tôi không có tool để tra cứu hồ sơ hoặc đặt lịch. Cần xem quy chế chính thức để biết điều kiện cụ thể.",
+    "latency_ms": 0.001,
+    "provider": "mock",
+    "model": "offline-scripted-lab-v1",
+    "is_mock": true,
+    "tool_count": 0
+  },
+  {
+    "test_case_id": "TC02",
+    "query": "Hãy tra cứu thông tin học vụ của sinh viên SV2026001, gồm họ tên, GPA và cố vấn.",
+    "status": "COMPLETED",
+    "output": "[MOCK] Tôi có thể hướng dẫn chung về tín chỉ, GPA và cố vấn; tôi không có tool để tra cứu hồ sơ hoặc đặt lịch. Cần xem quy chế chính thức để biết điều kiện cụ thể.",
+    "latency_ms": 0.001,
+    "provider": "mock",
+    "model": "offline-scripted-lab-v1",
+    "is_mock": true,
+    "tool_count": 0
+  },
+  {
+    "test_case_id": "TC03",
+    "query": "Đặt lịch tư vấn cho sinh viên SV2026001 với PGS.TS Nguyễn Văn A vào 14:00 ngày 15/09/2026. Cho tôi mã đặt lịch.",
+    "status": "COMPLETED",
+    "output": "[MOCK] Tôi có thể hướng dẫn chung về tín chỉ, GPA và cố vấn; tôi không có tool để tra cứu hồ sơ hoặc đặt lịch. Cần xem quy chế chính thức để biết điều kiện cụ thể.",
+    "latency_ms": 0.001,
+    "provider": "mock",
+    "model": "offline-scripted-lab-v1",
+    "is_mock": true,
+    "tool_count": 0
+  },
+  {
+    "test_case_id": "TC04",
+    "query": "Tôi chưa biết cố vấn của sinh viên SV2026002. Hãy tra cứu hồ sơ, cho biết họ tên và GPA, rồi đặt lịch với đúng cố vấn đó vào 09:30 ngày 16/09/2026. Cho tôi mã đặt lịch.",
+    "status": "COMPLETED",
+    "output": "[MOCK] Tôi có thể hướng dẫn chung về tín chỉ, GPA và cố vấn; tôi không có tool để tra cứu hồ sơ hoặc đặt lịch. Cần xem quy chế chính thức để biết điều kiện cụ thể.",
+    "latency_ms": 0.001,
+    "provider": "mock",
+    "model": "offline-scripted-lab-v1",
+    "is_mock": true,
+    "tool_count": 0
+  },
+  {
+    "test_case_id": "TC05",
+    "query": "Hãy tra cứu hồ sơ của sinh viên SV9999999. Nếu có hồ sơ thì đặt lịch với cố vấn của sinh viên đó vào 10:00 ngày 17/09/2026; nếu không có thì báo rõ và không đặt lịch.",
+    "status": "COMPLETED",
+    "output": "[MOCK] Tôi có thể hướng dẫn chung về tín chỉ, GPA và cố vấn; tôi không có tool để tra cứu hồ sơ hoặc đặt lịch. Cần xem quy chế chính thức để biết điều kiện cụ thể.",
+    "latency_ms": 0.001,
+    "provider": "mock",
+    "model": "offline-scripted-lab-v1",
+    "is_mock": true,
+    "tool_count": 0
+  }
+]

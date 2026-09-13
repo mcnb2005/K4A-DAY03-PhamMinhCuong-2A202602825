@@ -1,0 +1,603 @@
+[
+  {
+    "run_id": "bcc37792ef06437c8d14e6717b987e4b",
+    "test_case_id": "TC01",
+    "event_id": "bcc37792ef06437c8d14e6717b987e4b:1",
+    "step": 1,
+    "query": "Chào bạn, bạn có thể giới thiệu quy chế học vụ cơ bản của Đại học VinUni không?",
+    "action_type": "LLM_DECISION",
+    "provider": "mock",
+    "model": "offline-scripted-lab-v1",
+    "is_mock": true,
+    "started_at": "2026-09-13T03:05:57.583+00:00",
+    "ended_at": "2026-09-13T03:05:57.583+00:00",
+    "start_ms": 0.059,
+    "end_ms": 0.233,
+    "latency_ms": 0.174,
+    "thought": "LLM trả lời bằng văn bản dựa trên ngữ cảnh hiện có.",
+    "thought_source": "application_summary",
+    "proposed_calls": [],
+    "usage": {},
+    "response_id": null
+  },
+  {
+    "run_id": "bcc37792ef06437c8d14e6717b987e4b",
+    "test_case_id": "TC01",
+    "event_id": "bcc37792ef06437c8d14e6717b987e4b:2",
+    "step": 1,
+    "query": "Chào bạn, bạn có thể giới thiệu quy chế học vụ cơ bản của Đại học VinUni không?",
+    "action_type": "FINAL_ANSWER",
+    "provider": "mock",
+    "model": "offline-scripted-lab-v1",
+    "is_mock": true,
+    "started_at": "2026-09-13T03:05:57.583+00:00",
+    "ended_at": "2026-09-13T03:05:57.583+00:00",
+    "start_ms": 0.25,
+    "end_ms": 0.253,
+    "latency_ms": 0.003,
+    "output": "[MOCK] Sinh viên cần theo dõi tín chỉ, GPA, điều kiện tiên quyết và liên hệ cố vấn. Bài lab chưa có văn bản quy chế chính thức của VinUni để khẳng định ngưỡng cụ thể.",
+    "parent_event_id": "bcc37792ef06437c8d14e6717b987e4b:1"
+  },
+  {
+    "run_id": "6b9ed74cefc44018935830ad3b3c2087",
+    "test_case_id": "TC02",
+    "event_id": "6b9ed74cefc44018935830ad3b3c2087:1",
+    "step": 1,
+    "query": "Hãy tra cứu thông tin học vụ của sinh viên SV2026001, gồm họ tên, GPA và cố vấn.",
+    "action_type": "LLM_DECISION",
+    "provider": "mock",
+    "model": "offline-scripted-lab-v1",
+    "is_mock": true,
+    "started_at": "2026-09-13T03:05:57.584+00:00",
+    "ended_at": "2026-09-13T03:05:57.584+00:00",
+    "start_ms": 0.058,
+    "end_ms": 0.206,
+    "latency_ms": 0.148,
+    "thought": "Yêu cầu thực thi công cụ: academic_query",
+    "thought_source": "application_summary",
+    "proposed_calls": [
+      {
+        "id": "mock_33f555e2c2a4",
+        "name": "academic_query",
+        "arguments": {
+          "student_id": "SV2026001"
+        }
+      }
+    ],
+    "usage": {},
+    "response_id": null
+  },
+  {
+    "run_id": "6b9ed74cefc44018935830ad3b3c2087",
+    "test_case_id": "TC02",
+    "event_id": "6b9ed74cefc44018935830ad3b3c2087:2",
+    "step": 1,
+    "query": "Hãy tra cứu thông tin học vụ của sinh viên SV2026001, gồm họ tên, GPA và cố vấn.",
+    "action_type": "TOOL_EXECUTION",
+    "provider": "mock",
+    "model": "offline-scripted-lab-v1",
+    "is_mock": true,
+    "started_at": "2026-09-13T03:05:57.584+00:00",
+    "ended_at": "2026-09-13T03:05:57.584+00:00",
+    "start_ms": 0.218,
+    "end_ms": 0.349,
+    "latency_ms": 0.131,
+    "parent_event_id": "6b9ed74cefc44018935830ad3b3c2087:1",
+    "tool_call_id": "mock_33f555e2c2a4",
+    "tool_name": "academic_query",
+    "arguments": {
+      "student_id": "SV2026001"
+    },
+    "observation": {
+      "simulated": true,
+      "status": "SUCCESS",
+      "student_id": "SV2026001",
+      "data": {
+        "full_name": "Nguyễn Văn An",
+        "class": "AI-K4",
+        "gpa": 3.85,
+        "email": "an.nv@vinuni.edu.vn",
+        "status": "Đang học",
+        "advisor": "PGS.TS Nguyễn Văn A"
+      }
+    },
+    "mcp_response": {
+      "jsonrpc": "2.0",
+      "id": 1,
+      "server": "vinuni-academic-mcp-server",
+      "tool": "academic_query",
+      "result": {
+        "simulated": true,
+        "status": "SUCCESS",
+        "student_id": "SV2026001",
+        "data": {
+          "full_name": "Nguyễn Văn An",
+          "class": "AI-K4",
+          "gpa": 3.85,
+          "email": "an.nv@vinuni.edu.vn",
+          "status": "Đang học",
+          "advisor": "PGS.TS Nguyễn Văn A"
+        }
+      }
+    },
+    "transport": "in_process_simulator"
+  },
+  {
+    "run_id": "6b9ed74cefc44018935830ad3b3c2087",
+    "test_case_id": "TC02",
+    "event_id": "6b9ed74cefc44018935830ad3b3c2087:3",
+    "step": 2,
+    "query": "Hãy tra cứu thông tin học vụ của sinh viên SV2026001, gồm họ tên, GPA và cố vấn.",
+    "action_type": "LLM_DECISION",
+    "provider": "mock",
+    "model": "offline-scripted-lab-v1",
+    "is_mock": true,
+    "started_at": "2026-09-13T03:05:57.584+00:00",
+    "ended_at": "2026-09-13T03:05:57.585+00:00",
+    "start_ms": 0.368,
+    "end_ms": 0.386,
+    "latency_ms": 0.018,
+    "thought": "LLM trả lời bằng văn bản dựa trên ngữ cảnh hiện có.",
+    "thought_source": "application_summary",
+    "proposed_calls": [],
+    "usage": {},
+    "response_id": null
+  },
+  {
+    "run_id": "6b9ed74cefc44018935830ad3b3c2087",
+    "test_case_id": "TC02",
+    "event_id": "6b9ed74cefc44018935830ad3b3c2087:4",
+    "step": 2,
+    "query": "Hãy tra cứu thông tin học vụ của sinh viên SV2026001, gồm họ tên, GPA và cố vấn.",
+    "action_type": "FINAL_ANSWER",
+    "provider": "mock",
+    "model": "offline-scripted-lab-v1",
+    "is_mock": true,
+    "started_at": "2026-09-13T03:05:57.585+00:00",
+    "ended_at": "2026-09-13T03:05:57.585+00:00",
+    "start_ms": 0.392,
+    "end_ms": 0.394,
+    "latency_ms": 0.002,
+    "output": "[MOCK] Hồ sơ mô phỏng SV2026001: Nguyễn Văn An, GPA 3.85, cố vấn PGS.TS Nguyễn Văn A.",
+    "parent_event_id": "6b9ed74cefc44018935830ad3b3c2087:3"
+  },
+  {
+    "run_id": "362a61a82b454fedb702951948757eee",
+    "test_case_id": "TC03",
+    "event_id": "362a61a82b454fedb702951948757eee:1",
+    "step": 1,
+    "query": "Đặt lịch tư vấn cho sinh viên SV2026001 với PGS.TS Nguyễn Văn A vào 14:00 ngày 15/09/2026. Cho tôi mã đặt lịch.",
+    "action_type": "LLM_DECISION",
+    "provider": "mock",
+    "model": "offline-scripted-lab-v1",
+    "is_mock": true,
+    "started_at": "2026-09-13T03:05:57.586+00:00",
+    "ended_at": "2026-09-13T03:05:57.586+00:00",
+    "start_ms": 0.045,
+    "end_ms": 0.103,
+    "latency_ms": 0.058,
+    "thought": "Yêu cầu thực thi công cụ: schedule_appointment",
+    "thought_source": "application_summary",
+    "proposed_calls": [
+      {
+        "id": "mock_a4fb49d6af6a",
+        "name": "schedule_appointment",
+        "arguments": {
+          "student_id": "SV2026001",
+          "datetime_str": "14:00 15/09/2026",
+          "advisor_name": "PGS.TS Nguyễn Văn A"
+        }
+      }
+    ],
+    "usage": {},
+    "response_id": null
+  },
+  {
+    "run_id": "362a61a82b454fedb702951948757eee",
+    "test_case_id": "TC03",
+    "event_id": "362a61a82b454fedb702951948757eee:2",
+    "step": 1,
+    "query": "Đặt lịch tư vấn cho sinh viên SV2026001 với PGS.TS Nguyễn Văn A vào 14:00 ngày 15/09/2026. Cho tôi mã đặt lịch.",
+    "action_type": "TOOL_EXECUTION",
+    "provider": "mock",
+    "model": "offline-scripted-lab-v1",
+    "is_mock": true,
+    "started_at": "2026-09-13T03:05:57.586+00:00",
+    "ended_at": "2026-09-13T03:05:57.589+00:00",
+    "start_ms": 0.114,
+    "end_ms": 3.471,
+    "latency_ms": 3.357,
+    "parent_event_id": "362a61a82b454fedb702951948757eee:1",
+    "tool_call_id": "mock_a4fb49d6af6a",
+    "tool_name": "schedule_appointment",
+    "arguments": {
+      "student_id": "SV2026001",
+      "datetime_str": "14:00 15/09/2026",
+      "advisor_name": "PGS.TS Nguyễn Văn A"
+    },
+    "observation": {
+      "status": "SUCCESS",
+      "simulated": true,
+      "booking_id": "BK-A833B49975E7",
+      "student_id": "SV2026001",
+      "datetime": "14:00 15/09/2026",
+      "timezone": "UTC+07:00",
+      "advisor": "PGS.TS Nguyễn Văn A",
+      "already_booked": false,
+      "message": "Đặt lịch mô phỏng thành công cho SV2026001 với PGS.TS Nguyễn Văn A vào 14:00 15/09/2026 (UTC+07:00)."
+    },
+    "mcp_response": {
+      "jsonrpc": "2.0",
+      "id": 1,
+      "server": "vinuni-academic-mcp-server",
+      "tool": "schedule_appointment",
+      "result": {
+        "status": "SUCCESS",
+        "simulated": true,
+        "booking_id": "BK-A833B49975E7",
+        "student_id": "SV2026001",
+        "datetime": "14:00 15/09/2026",
+        "timezone": "UTC+07:00",
+        "advisor": "PGS.TS Nguyễn Văn A",
+        "already_booked": false,
+        "message": "Đặt lịch mô phỏng thành công cho SV2026001 với PGS.TS Nguyễn Văn A vào 14:00 15/09/2026 (UTC+07:00)."
+      }
+    },
+    "transport": "in_process_simulator"
+  },
+  {
+    "run_id": "362a61a82b454fedb702951948757eee",
+    "test_case_id": "TC03",
+    "event_id": "362a61a82b454fedb702951948757eee:3",
+    "step": 2,
+    "query": "Đặt lịch tư vấn cho sinh viên SV2026001 với PGS.TS Nguyễn Văn A vào 14:00 ngày 15/09/2026. Cho tôi mã đặt lịch.",
+    "action_type": "LLM_DECISION",
+    "provider": "mock",
+    "model": "offline-scripted-lab-v1",
+    "is_mock": true,
+    "started_at": "2026-09-13T03:05:57.589+00:00",
+    "ended_at": "2026-09-13T03:05:57.589+00:00",
+    "start_ms": 3.516,
+    "end_ms": 3.54,
+    "latency_ms": 0.024,
+    "thought": "LLM trả lời bằng văn bản dựa trên ngữ cảnh hiện có.",
+    "thought_source": "application_summary",
+    "proposed_calls": [],
+    "usage": {},
+    "response_id": null
+  },
+  {
+    "run_id": "362a61a82b454fedb702951948757eee",
+    "test_case_id": "TC03",
+    "event_id": "362a61a82b454fedb702951948757eee:4",
+    "step": 2,
+    "query": "Đặt lịch tư vấn cho sinh viên SV2026001 với PGS.TS Nguyễn Văn A vào 14:00 ngày 15/09/2026. Cho tôi mã đặt lịch.",
+    "action_type": "FINAL_ANSWER",
+    "provider": "mock",
+    "model": "offline-scripted-lab-v1",
+    "is_mock": true,
+    "started_at": "2026-09-13T03:05:57.589+00:00",
+    "ended_at": "2026-09-13T03:05:57.589+00:00",
+    "start_ms": 3.546,
+    "end_ms": 3.548,
+    "latency_ms": 0.002,
+    "output": "[MOCK] Đặt lịch mô phỏng thành công cho SV2026001 với PGS.TS Nguyễn Văn A vào 14:00 15/09/2026 (UTC+07:00). Mã đặt lịch: BK-A833B49975E7",
+    "parent_event_id": "362a61a82b454fedb702951948757eee:3"
+  },
+  {
+    "run_id": "61ea12cd0098496ca1aa02fbf2469bcd",
+    "test_case_id": "TC04",
+    "event_id": "61ea12cd0098496ca1aa02fbf2469bcd:1",
+    "step": 1,
+    "query": "Tôi chưa biết cố vấn của sinh viên SV2026002. Hãy tra cứu hồ sơ, cho biết họ tên và GPA, rồi đặt lịch với đúng cố vấn đó vào 09:30 ngày 16/09/2026. Cho tôi mã đặt lịch.",
+    "action_type": "LLM_DECISION",
+    "provider": "mock",
+    "model": "offline-scripted-lab-v1",
+    "is_mock": true,
+    "started_at": "2026-09-13T03:05:57.591+00:00",
+    "ended_at": "2026-09-13T03:05:57.591+00:00",
+    "start_ms": 0.057,
+    "end_ms": 0.109,
+    "latency_ms": 0.052,
+    "thought": "Yêu cầu thực thi công cụ: academic_query",
+    "thought_source": "application_summary",
+    "proposed_calls": [
+      {
+        "id": "mock_3db751efba39",
+        "name": "academic_query",
+        "arguments": {
+          "student_id": "SV2026002"
+        }
+      }
+    ],
+    "usage": {},
+    "response_id": null
+  },
+  {
+    "run_id": "61ea12cd0098496ca1aa02fbf2469bcd",
+    "test_case_id": "TC04",
+    "event_id": "61ea12cd0098496ca1aa02fbf2469bcd:2",
+    "step": 1,
+    "query": "Tôi chưa biết cố vấn của sinh viên SV2026002. Hãy tra cứu hồ sơ, cho biết họ tên và GPA, rồi đặt lịch với đúng cố vấn đó vào 09:30 ngày 16/09/2026. Cho tôi mã đặt lịch.",
+    "action_type": "TOOL_EXECUTION",
+    "provider": "mock",
+    "model": "offline-scripted-lab-v1",
+    "is_mock": true,
+    "started_at": "2026-09-13T03:05:57.591+00:00",
+    "ended_at": "2026-09-13T03:05:57.591+00:00",
+    "start_ms": 0.121,
+    "end_ms": 0.225,
+    "latency_ms": 0.104,
+    "parent_event_id": "61ea12cd0098496ca1aa02fbf2469bcd:1",
+    "tool_call_id": "mock_3db751efba39",
+    "tool_name": "academic_query",
+    "arguments": {
+      "student_id": "SV2026002"
+    },
+    "observation": {
+      "simulated": true,
+      "status": "SUCCESS",
+      "student_id": "SV2026002",
+      "data": {
+        "full_name": "Trần Thị Bình",
+        "class": "AI-K4",
+        "gpa": 3.6,
+        "email": "binh.tt@vinuni.edu.vn",
+        "status": "Đang học",
+        "advisor": "TS. Lê Thị B"
+      }
+    },
+    "mcp_response": {
+      "jsonrpc": "2.0",
+      "id": 1,
+      "server": "vinuni-academic-mcp-server",
+      "tool": "academic_query",
+      "result": {
+        "simulated": true,
+        "status": "SUCCESS",
+        "student_id": "SV2026002",
+        "data": {
+          "full_name": "Trần Thị Bình",
+          "class": "AI-K4",
+          "gpa": 3.6,
+          "email": "binh.tt@vinuni.edu.vn",
+          "status": "Đang học",
+          "advisor": "TS. Lê Thị B"
+        }
+      }
+    },
+    "transport": "in_process_simulator"
+  },
+  {
+    "run_id": "61ea12cd0098496ca1aa02fbf2469bcd",
+    "test_case_id": "TC04",
+    "event_id": "61ea12cd0098496ca1aa02fbf2469bcd:3",
+    "step": 2,
+    "query": "Tôi chưa biết cố vấn của sinh viên SV2026002. Hãy tra cứu hồ sơ, cho biết họ tên và GPA, rồi đặt lịch với đúng cố vấn đó vào 09:30 ngày 16/09/2026. Cho tôi mã đặt lịch.",
+    "action_type": "LLM_DECISION",
+    "provider": "mock",
+    "model": "offline-scripted-lab-v1",
+    "is_mock": true,
+    "started_at": "2026-09-13T03:05:57.591+00:00",
+    "ended_at": "2026-09-13T03:05:57.591+00:00",
+    "start_ms": 0.244,
+    "end_ms": 0.269,
+    "latency_ms": 0.025,
+    "thought": "Yêu cầu thực thi công cụ: schedule_appointment",
+    "thought_source": "application_summary",
+    "proposed_calls": [
+      {
+        "id": "mock_0ad862b49fac",
+        "name": "schedule_appointment",
+        "arguments": {
+          "student_id": "SV2026002",
+          "datetime_str": "09:30 16/09/2026",
+          "advisor_name": "TS. Lê Thị B"
+        }
+      }
+    ],
+    "usage": {},
+    "response_id": null
+  },
+  {
+    "run_id": "61ea12cd0098496ca1aa02fbf2469bcd",
+    "test_case_id": "TC04",
+    "event_id": "61ea12cd0098496ca1aa02fbf2469bcd:4",
+    "step": 2,
+    "query": "Tôi chưa biết cố vấn của sinh viên SV2026002. Hãy tra cứu hồ sơ, cho biết họ tên và GPA, rồi đặt lịch với đúng cố vấn đó vào 09:30 ngày 16/09/2026. Cho tôi mã đặt lịch.",
+    "action_type": "TOOL_EXECUTION",
+    "provider": "mock",
+    "model": "offline-scripted-lab-v1",
+    "is_mock": true,
+    "started_at": "2026-09-13T03:05:57.591+00:00",
+    "ended_at": "2026-09-13T03:05:57.591+00:00",
+    "start_ms": 0.274,
+    "end_ms": 0.412,
+    "latency_ms": 0.138,
+    "parent_event_id": "61ea12cd0098496ca1aa02fbf2469bcd:3",
+    "tool_call_id": "mock_0ad862b49fac",
+    "tool_name": "schedule_appointment",
+    "arguments": {
+      "student_id": "SV2026002",
+      "datetime_str": "09:30 16/09/2026",
+      "advisor_name": "TS. Lê Thị B"
+    },
+    "observation": {
+      "status": "SUCCESS",
+      "simulated": true,
+      "booking_id": "BK-6B265240CFEC",
+      "student_id": "SV2026002",
+      "datetime": "09:30 16/09/2026",
+      "timezone": "UTC+07:00",
+      "advisor": "TS. Lê Thị B",
+      "already_booked": false,
+      "message": "Đặt lịch mô phỏng thành công cho SV2026002 với TS. Lê Thị B vào 09:30 16/09/2026 (UTC+07:00)."
+    },
+    "mcp_response": {
+      "jsonrpc": "2.0",
+      "id": 2,
+      "server": "vinuni-academic-mcp-server",
+      "tool": "schedule_appointment",
+      "result": {
+        "status": "SUCCESS",
+        "simulated": true,
+        "booking_id": "BK-6B265240CFEC",
+        "student_id": "SV2026002",
+        "datetime": "09:30 16/09/2026",
+        "timezone": "UTC+07:00",
+        "advisor": "TS. Lê Thị B",
+        "already_booked": false,
+        "message": "Đặt lịch mô phỏng thành công cho SV2026002 với TS. Lê Thị B vào 09:30 16/09/2026 (UTC+07:00)."
+      }
+    },
+    "transport": "in_process_simulator"
+  },
+  {
+    "run_id": "61ea12cd0098496ca1aa02fbf2469bcd",
+    "test_case_id": "TC04",
+    "event_id": "61ea12cd0098496ca1aa02fbf2469bcd:5",
+    "step": 3,
+    "query": "Tôi chưa biết cố vấn của sinh viên SV2026002. Hãy tra cứu hồ sơ, cho biết họ tên và GPA, rồi đặt lịch với đúng cố vấn đó vào 09:30 ngày 16/09/2026. Cho tôi mã đặt lịch.",
+    "action_type": "LLM_DECISION",
+    "provider": "mock",
+    "model": "offline-scripted-lab-v1",
+    "is_mock": true,
+    "started_at": "2026-09-13T03:05:57.591+00:00",
+    "ended_at": "2026-09-13T03:05:57.591+00:00",
+    "start_ms": 0.429,
+    "end_ms": 0.455,
+    "latency_ms": 0.026,
+    "thought": "LLM trả lời bằng văn bản dựa trên ngữ cảnh hiện có.",
+    "thought_source": "application_summary",
+    "proposed_calls": [],
+    "usage": {},
+    "response_id": null
+  },
+  {
+    "run_id": "61ea12cd0098496ca1aa02fbf2469bcd",
+    "test_case_id": "TC04",
+    "event_id": "61ea12cd0098496ca1aa02fbf2469bcd:6",
+    "step": 3,
+    "query": "Tôi chưa biết cố vấn của sinh viên SV2026002. Hãy tra cứu hồ sơ, cho biết họ tên và GPA, rồi đặt lịch với đúng cố vấn đó vào 09:30 ngày 16/09/2026. Cho tôi mã đặt lịch.",
+    "action_type": "FINAL_ANSWER",
+    "provider": "mock",
+    "model": "offline-scripted-lab-v1",
+    "is_mock": true,
+    "started_at": "2026-09-13T03:05:57.591+00:00",
+    "ended_at": "2026-09-13T03:05:57.591+00:00",
+    "start_ms": 0.461,
+    "end_ms": 0.463,
+    "latency_ms": 0.002,
+    "output": "[MOCK] Đặt lịch mô phỏng thành công cho SV2026002 với TS. Lê Thị B vào 09:30 16/09/2026 (UTC+07:00). Mã đặt lịch: BK-6B265240CFEC Hồ sơ mô phỏng: Trần Thị Bình, GPA 3.6.",
+    "parent_event_id": "61ea12cd0098496ca1aa02fbf2469bcd:5"
+  },
+  {
+    "run_id": "7d0a1bd1a6884e49a8964c2e741f041b",
+    "test_case_id": "TC05",
+    "event_id": "7d0a1bd1a6884e49a8964c2e741f041b:1",
+    "step": 1,
+    "query": "Hãy tra cứu hồ sơ của sinh viên SV9999999. Nếu có hồ sơ thì đặt lịch với cố vấn của sinh viên đó vào 10:00 ngày 17/09/2026; nếu không có thì báo rõ và không đặt lịch.",
+    "action_type": "LLM_DECISION",
+    "provider": "mock",
+    "model": "offline-scripted-lab-v1",
+    "is_mock": true,
+    "started_at": "2026-09-13T03:05:57.592+00:00",
+    "ended_at": "2026-09-13T03:05:57.592+00:00",
+    "start_ms": 0.086,
+    "end_ms": 0.148,
+    "latency_ms": 0.062,
+    "thought": "Yêu cầu thực thi công cụ: academic_query",
+    "thought_source": "application_summary",
+    "proposed_calls": [
+      {
+        "id": "mock_13c3bbe99627",
+        "name": "academic_query",
+        "arguments": {
+          "student_id": "SV9999999"
+        }
+      }
+    ],
+    "usage": {},
+    "response_id": null
+  },
+  {
+    "run_id": "7d0a1bd1a6884e49a8964c2e741f041b",
+    "test_case_id": "TC05",
+    "event_id": "7d0a1bd1a6884e49a8964c2e741f041b:2",
+    "step": 1,
+    "query": "Hãy tra cứu hồ sơ của sinh viên SV9999999. Nếu có hồ sơ thì đặt lịch với cố vấn của sinh viên đó vào 10:00 ngày 17/09/2026; nếu không có thì báo rõ và không đặt lịch.",
+    "action_type": "TOOL_EXECUTION",
+    "provider": "mock",
+    "model": "offline-scripted-lab-v1",
+    "is_mock": true,
+    "started_at": "2026-09-13T03:05:57.592+00:00",
+    "ended_at": "2026-09-13T03:05:57.592+00:00",
+    "start_ms": 0.161,
+    "end_ms": 0.281,
+    "latency_ms": 0.121,
+    "parent_event_id": "7d0a1bd1a6884e49a8964c2e741f041b:1",
+    "tool_call_id": "mock_13c3bbe99627",
+    "tool_name": "academic_query",
+    "arguments": {
+      "student_id": "SV9999999"
+    },
+    "observation": {
+      "simulated": true,
+      "status": "NOT_FOUND",
+      "student_id": "SV9999999",
+      "message": "Không tìm thấy sinh viên SV9999999 trong dữ liệu mô phỏng."
+    },
+    "mcp_response": {
+      "jsonrpc": "2.0",
+      "id": 1,
+      "server": "vinuni-academic-mcp-server",
+      "tool": "academic_query",
+      "result": {
+        "simulated": true,
+        "status": "NOT_FOUND",
+        "student_id": "SV9999999",
+        "message": "Không tìm thấy sinh viên SV9999999 trong dữ liệu mô phỏng."
+      }
+    },
+    "transport": "in_process_simulator"
+  },
+  {
+    "run_id": "7d0a1bd1a6884e49a8964c2e741f041b",
+    "test_case_id": "TC05",
+    "event_id": "7d0a1bd1a6884e49a8964c2e741f041b:3",
+    "step": 2,
+    "query": "Hãy tra cứu hồ sơ của sinh viên SV9999999. Nếu có hồ sơ thì đặt lịch với cố vấn của sinh viên đó vào 10:00 ngày 17/09/2026; nếu không có thì báo rõ và không đặt lịch.",
+    "action_type": "LLM_DECISION",
+    "provider": "mock",
+    "model": "offline-scripted-lab-v1",
+    "is_mock": true,
+    "started_at": "2026-09-13T03:05:57.592+00:00",
+    "ended_at": "2026-09-13T03:05:57.593+00:00",
+    "start_ms": 0.32,
+    "end_ms": 0.345,
+    "latency_ms": 0.025,
+    "thought": "LLM trả lời bằng văn bản dựa trên ngữ cảnh hiện có.",
+    "thought_source": "application_summary",
+    "proposed_calls": [],
+    "usage": {},
+    "response_id": null
+  },
+  {
+    "run_id": "7d0a1bd1a6884e49a8964c2e741f041b",
+    "test_case_id": "TC05",
+    "event_id": "7d0a1bd1a6884e49a8964c2e741f041b:4",
+    "step": 2,
+    "query": "Hãy tra cứu hồ sơ của sinh viên SV9999999. Nếu có hồ sơ thì đặt lịch với cố vấn của sinh viên đó vào 10:00 ngày 17/09/2026; nếu không có thì báo rõ và không đặt lịch.",
+    "action_type": "FINAL_ANSWER",
+    "provider": "mock",
+    "model": "offline-scripted-lab-v1",
+    "is_mock": true,
+    "started_at": "2026-09-13T03:05:57.593+00:00",
+    "ended_at": "2026-09-13T03:05:57.593+00:00",
+    "start_ms": 0.352,
+    "end_ms": 0.353,
+    "latency_ms": 0.002,
+    "output": "[MOCK] Không tìm thấy sinh viên SV9999999 trong dữ liệu mô phỏng.",
+    "parent_event_id": "7d0a1bd1a6884e49a8964c2e741f041b:3"
+  }
+]

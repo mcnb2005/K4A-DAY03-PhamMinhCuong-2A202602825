@@ -1,0 +1,55 @@
+[
+  {
+    "id": "TC01",
+    "type": "direct_query",
+    "question": "Chào bạn, bạn có thể giới thiệu quy chế học vụ cơ bản của Đại học VinUni không?",
+    "expected_behavior": "Trả lời chung, nói rõ chưa có quy chế chính thức; không gọi tool hay tự đặt ngưỡng tín chỉ/GPA.",
+    "complexity": "Low",
+    "allowed_tool_sequences": [[]],
+    "answer_checks": [["tín chỉ"], ["GPA"], ["cố vấn"]],
+    "forbidden_answer_fragments": ["120 tín chỉ", "GPA trên 2.0"]
+  },
+  {
+    "id": "TC02",
+    "type": "single_tool_query",
+    "question": "Hãy tra cứu thông tin học vụ của sinh viên SV2026001, gồm họ tên, GPA và cố vấn.",
+    "expected_behavior": "academic_query(SV2026001), rồi LLM tổng hợp hồ sơ từ Observation.",
+    "complexity": "Medium",
+    "allowed_tool_sequences": [["academic_query"]],
+    "expected_arguments": {"academic_query": {"student_id": "SV2026001"}},
+    "answer_checks": [["SV2026001"], ["Nguyễn Văn An"], ["3.85", "3,85"], ["Nguyễn Văn A"]]
+  },
+  {
+    "id": "TC03",
+    "type": "appointment_booking",
+    "question": "Đặt lịch tư vấn cho sinh viên SV2026001 với PGS.TS Nguyễn Văn A vào 14:00 ngày 15/09/2026. Cho tôi mã đặt lịch.",
+    "expected_behavior": "Đặt lịch đúng mã, cố vấn và ngày giờ đã được cung cấp; trả booking_id từ tool.",
+    "complexity": "Medium",
+    "allowed_tool_sequences": [["schedule_appointment"], ["academic_query", "schedule_appointment"]],
+    "expected_arguments": {"academic_query": {"student_id": "SV2026001"}, "schedule_appointment": {"student_id": "SV2026001", "datetime_str": "14:00 15/09/2026", "advisor_name": "PGS.TS Nguyễn Văn A"}},
+    "answer_checks": [["SV2026001"], ["Nguyễn Văn A"], ["mô phỏng"]]
+  },
+  {
+    "id": "TC04",
+    "type": "multi_step_reasoning",
+    "question": "Tôi chưa biết cố vấn của sinh viên SV2026002. Hãy tra cứu hồ sơ, cho biết họ tên và GPA, rồi đặt lịch với đúng cố vấn đó vào 09:30 ngày 16/09/2026. Cho tôi mã đặt lịch.",
+    "expected_behavior": "Tra academic_query(SV2026002), nhận TS. Lê Thị B từ Observation; lượt LLM kế tiếp đặt lịch đúng cố vấn và trả kết quả tổng hợp.",
+    "complexity": "High",
+    "allowed_tool_sequences": [["academic_query", "schedule_appointment"]],
+    "requires_observation_dependency": true,
+    "expected_arguments": {"academic_query": {"student_id": "SV2026002"}, "schedule_appointment": {"student_id": "SV2026002", "datetime_str": "09:30 16/09/2026", "advisor_name": "TS. Lê Thị B"}},
+    "answer_checks": [["SV2026002"], ["Trần Thị Bình"], ["3.6", "3,6"], ["Lê Thị B"], ["mô phỏng"]]
+  },
+  {
+    "id": "TC05",
+    "type": "edge_case_handling",
+    "question": "Hãy tra cứu hồ sơ của sinh viên SV9999999. Nếu có hồ sơ thì đặt lịch với cố vấn của sinh viên đó vào 10:00 ngày 17/09/2026; nếu không có thì báo rõ và không đặt lịch.",
+    "expected_behavior": "Tra đúng SV9999999, nhận NOT_FOUND, không đặt lịch và không bịa hồ sơ.",
+    "complexity": "Medium",
+    "allowed_tool_sequences": [["academic_query"]],
+    "expected_arguments": {"academic_query": {"student_id": "SV9999999"}},
+    "expected_status": {"academic_query": "NOT_FOUND"},
+    "answer_checks": [["SV9999999"], ["không tìm thấy", "không có hồ sơ", "không tồn tại"]],
+    "forbidden_answer_fragments": ["Nguyễn Văn An", "Trần Thị Bình", "BK-"]
+  }
+]

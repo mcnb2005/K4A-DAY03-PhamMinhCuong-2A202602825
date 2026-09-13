@@ -1,130 +1,112 @@
-# 🏫 BÀI LAB 3: CHATBOT VS REACT AGENT — TỪ LÝ THUYẾT ĐẾN THỰC THI (MCP ENHANCED)
+# K4A · Day 03 · Chatbot vs ReAct Agent
 
-> **Mã bài học:** `DAY03-REACT-AGENT`  
-> **Hình thức thực hiện:** **CÁ NHÂN** *(Mỗi học viên tự làm và tự nộp 1 bài cá nhân)*  
-> **Quy chuẩn nộp bài:** Học viên Fork Repo này về GitHub cá nhân và đổi tên theo đúng cú pháp:  
-> 📌 **`K4-DAY03-HoVaTen-MSSV`** *(Ví dụ: `K4-DAY03-NguyenVanA-SV2026001`)*  
+**Học viên:** Phạm Minh Cương · **Mã học viên:** 2A202602825 · **Lớp:** Sáng K4A<br>
+**Đề tài:** Trợ lý học vụ: tra cứu hồ sơ và đặt lịch tư vấn mô phỏng.
 
----
+Fork từ [starter K4A](https://github.com/VinUni-AI20k/K4A-Day03-Lab-Chatbot-vs-ReAct-Agent-MCP).<br>
+Repo cá nhân: [mcnb2005/K4A-DAY03-PhamMinhCuong-2A202602825](https://github.com/mcnb2005/K4A-DAY03-PhamMinhCuong-2A202602825).
 
-## ⚡ 1. QUICKSTART — CÀI ĐẶT MÔI TRƯỜNG & CHẠY THỬ (3 PHÚT)
+## Chạy trên Windows PowerShell
 
-> 🐍 **Yêu cầu môi trường Python:** **Python 3.10 – 3.12** *(Tránh Python 3.9 do thiếu type hinting hiện đại và Python 3.13 do nhiều thư viện AI chưa hỗ trợ pre-built wheel)*.
+Yêu cầu Python 3.10–3.12. Trên máy làm bài hiện tại đã tạo `.venv` bằng Python 3.12.14.
+Nếu clone sang máy khác, tạo môi trường một lần:
 
-Thực hiện 3 bước lệnh Terminal thiết thực ngay khi clone repo về máy:
-
-### Bước 1: Clone Repo & Tạo môi trường ảo
-```bash
-git clone https://github.com/<tai_khoan_cua_ban>/K4-DAY03-HoVaTen-MSSV.git
-cd K4-DAY03-HoVaTen-MSSV
-
+```powershell
 python -m venv .venv
-# Trên Windows PowerShell:
-.venv\Scripts\Activate.ps1
-# Trên macOS / Linux / Bash / Zsh:
-source .venv/bin/activate
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+Copy-Item .env.example .env
 ```
 
-### Bước 2: Cài đặt thư viện & Tạo file cấu hình môi trường
-```bash
-pip install -r requirements.txt
-# Trên Windows CMD/PowerShell:
-copy .env.example .env
-copy config\test_cases.example.json config\test_cases.json
-# Trên macOS / Linux:
-cp .env.example .env
-cp config/test_cases.example.json config/test_cases.json
+Không cần kích hoạt môi trường hay đổi ExecutionPolicy; gọi trực tiếp Python trong `.venv`.
+Có thể thay `requirements.txt` bằng `requirements-lock.txt` để dùng đúng phiên bản đã kiểm thử.
+Chỉ copy `.env.example` khi chưa có `.env`, tránh ghi đè cấu hình đã điền.
+
+Chạy debug miễn phí và so sánh Chatbot:
+
+```powershell
+.\.venv\Scripts\python.exe src/app.py --all --provider mock --compare
+.\.venv\Scripts\python.exe -m unittest discover -s tests -v
 ```
 
-### Bước 3: Chạy thử Baseline kiểm tra môi trường
-```bash
-python src/app.py --all
+Nghiệm thu bằng LLM thật: chỉnh `.env`, đặt `LLM_PROVIDER=gemini` và điền `GEMINI_API_KEY`,
+hoặc `LLM_PROVIDER=openai` và điền `OPENAI_API_KEY`. Để `LLM_MODEL` trống dùng mặc định
+Gemini `gemini-2.5-flash` / OpenAI `gpt-4o-mini`; có thể chọn model tài khoản hỗ trợ.
+
+```powershell
+.\.venv\Scripts\python.exe src/app.py --all --require-live --compare
+.\.venv\Scripts\python.exe src/report.py
 ```
 
-**Kỳ vọng Output màn hình:**
-```text
-✅ [MOCK OFFLINE MODE PASS]: Môi trường đã sẵn sàng! 
-📊 [KẾT QUẢ TEST SUITE]: 2 Đã chạy (TC01, TC02 mẫu) | 3 Đang chờ viết câu hỏi (TODO)
+Nếu API lỗi, chương trình ghi lỗi và trả exit code khác 0; **không tự chuyển sang mock**.
+`--require-live` từ chối mock. Khóa API chỉ nằm trong `.env` đã được Git bỏ qua.
+
+Trò chuyện hoặc kiểm tra một yêu cầu:
+
+```powershell
+.\.venv\Scripts\python.exe src/app.py --interactive
+.\.venv\Scripts\python.exe src/app.py --query 'Tra cứu hồ sơ của SV2026002 rồi đặt lịch với cố vấn đó vào 09:30 ngày 16/09/2026.'
+.\.venv\Scripts\python.exe src/mcp_server.py
 ```
 
-> 🔑 **QUY ĐỊNH BẮT BUỘC VỀ API KEY VÀ NỘP BÀI (SUBMISSION REQUIREMENT):**  
-> 
-> 1. **Giai đoạn gõ code & debug (Miễn phí 0đ):** Hệ thống mặc định chạy `MockOfflineProvider` giúp bạn thực hành gõ code, kiểm thử logic ban đầu hoàn toàn miễn phí, không tốn token, không lo nghẽn mạng.  
-> 2. **Giai đoạn NỘP BÀI CHÍNH THỨC (Bắt buộc dùng LLM thật):** Khi chạy nghiệm thu để lấy dữ liệu dán vào báo cáo [`docs/trace_eval.md`](docs/trace_eval.md) nộp bài, **học viên BẮT BUỘC phải mở file `.env` điền `GEMINI_API_KEY` (hoặc `OPENAI_API_KEY`)** để Agent giao tiếp với mô hình LLM thật.  
-> 
-> ⚠️ *Lưu ý:* Bài nộp chỉ chạy trên Mock Provider mà không kết nối LLM API thật sẽ bị trừ điểm phần nghiệm thu thực tế (Tiêu chí 2 & Tiêu chí 3 trong Rubric).
+Trên macOS/Linux thay `.\.venv\Scripts\python.exe` bằng `.venv/bin/python`.
 
----
+## Sản phẩm và bằng chứng
 
-## 🎯 2. BỨC TRANH TỔNG THỂ & MỤC TIÊU DÀI HẠN (NORTH STAR GOAL)
+| File | Nội dung |
+| --- | --- |
+| `src/app.py` | ReAct loop tối đa 5 lượt LLM, baseline, kiểm thử và đo trace |
+| `src/providers.py` | OpenAI Responses API, Gemini Native Function Calling, mock riêng |
+| `src/tools.py` | Hai JSON Schemas, validation và dữ liệu/đặt lịch mô phỏng |
+| `src/mcp_server.py` | MCP simulator trong tiến trình, JSON-RPC request/response có ID |
+| `config/test_cases.json` | 5 ca nghiệm thu với điều kiện kiểm tra cụ thể |
+| `docs/trace_waterfall.json` | Bằng chứng API thật, sinh sau lệnh nghiệm thu |
+| `docs/trace_waterfall.eval.json` | PASS/FAIL từng ca với lý do lỗi |
+| `docs/trace_waterfall.baseline.json` | Kết quả Chatbot không gọi tool trên cùng 5 câu hỏi |
+| `docs/trace_eval.md` | Báo cáo cá nhân, Agentic Fit, kết quả và trích đoạn log |
+| `docs/trace_waterfall.mock*.json` | Bằng chứng debug offline, không thay thế API thật |
+| `tests/test_agent.py` | Kiểm tra vòng lặp, lỗi, schema, giao thức native và UTF-8 |
 
-Mục tiêu cốt lõi của Bài Lab này là giúp học viên tự tay phát triển một **Trợ lý Tác tử ReAct (ReAct Agent)** hoàn chỉnh.
+Phiên `--interactive`/`--query` ghi `docs/trace_session*.json`, giữ nguyên trace nghiệm thu.
+`docs/starter_trace.example.json` là log mẫu có sẵn từ starter, không phải kết quả bài làm.
+Mỗi câu hỏi interactive là một tác vụ độc lập; sổ lịch mô phỏng được giữ trong phiên.
 
-Thay vì chỉ sinh văn bản hội thoại đơn thuần như Chatbot cơ bản, tác tử (Agent) của bạn sẽ có khả năng:
-1. **Tự suy luận và chọn công cụ:** Chủ động kích hoạt vòng lặp ReAct (`Thought -> Action -> Observation`) qua giao thức **Model Context Protocol (MCP)** để truy vấn dữ liệu thực tế.
-2. **Tổng hợp câu trả lời chính xác:** Sử dụng dữ liệu thực tế từ Tool trả về để trả lời sinh viên, tránh hiện tượng ảo giác (Hallucination).
-3. **Trích xuất bằng chứng (Trace Log):** Ghi lại file vết `docs/trace_waterfall.json` chứng minh chuỗi suy luận từng bước của Agent.
+## Điểm khác biệt Chatbot và Agent trong bài
 
-> 🌐 **GIAO THỨC MODEL CONTEXT PROTOCOL (MCP):**  
-> Mã nguồn [`src/mcp_server.py`](src/mcp_server.py) mô phỏng kiến trúc MCP Server chuẩn (giao tiếp Client-Server độc lập qua giao thức JSON-RPC 2.0). Agent Core ([`src/app.py`](src/app.py)) đóng vai trò MCP Client gửi yêu cầu thực thi Tool tới MCP Server.
-
----
-
-## 🗺️ 3. LUỒNG THỰC HÀNH TINH GIẢN 3 BƯỚC (DOCUMENTATION FLOW)
-
-Học viên làm bài lần lượt theo đúng luồng 3 bước tinh giản dưới đây:
-
-| Bước | Tài liệu / Hành động | Nội dung thực hiện |
-| :---: | :--- | :--- |
-| **Bước 1** | 📄 **`README.md`** *(Hiện tại)* | Nắm quy chế, chạy Quickstart verify môi trường offline miễn phí. |
-| **Bước 2** | 🎓 **`docs/CODELAB.md`** | **[TRỌNG TÂM]** Chọn bài toán (Tham khảo gợi ý tại [docs/DANH_SACH_DE_TAI.md](docs/DANH_SACH_DE_TAI.md)) ➔ Phân tích Agentic Fit ➔ Điền `GEMINI_API_KEY` ➔ Code từng task theo checklist. |
-| **Bước 3** | 📊 **`docs/trace_eval.md`** | Chạy test suite với API thật, xuất trace log, hoàn thiện báo cáo thu hoạch duy nhất và push repo nộp bài. |
-
----
-
-## ⏱️ 4. PHÂN BỔ THỜI GIAN (180 PHÚT LÀM BÀI)
-
-* **Phần 1 (45 phút):** Agentic Fit & Tool Schemas (Đánh giá 4 tiêu chí Fit & Khai báo Tool Schema chuẩn JSON Schema)
-* **Phần 2 (60 phút):** ReAct Loop & MCP Integration (Viết hàm MCP Server & Vòng lặp Thought -> Action -> Observation)
-* **Phần 3 (45 phút):** Test Execution & Waterfall Log (Cắm API Key thật, chạy 5 Test Cases & Xuất file docs/trace_waterfall.json)
-* **Phần 4 (30 phút):** Self-Audit & Push GitHub (Tự kiểm tra code, hoàn thiện báo cáo docs/trace_eval.md & push bài nộp lên GitHub cá nhân)
-
----
-
-## 📂 5. CẤU TRÚC THƯ MỤC DỰ ÁN
-
-```text
-📁 K4-Day03-Lab-Chatbot-vs-ReAct-Agent-MCP/
-├── 📄 README.md                 <-- ⚡ [BƯỚC 1] Quickstart setup & Cảnh báo quy định API Key
-├── 📄 .env.example              <-- 🔑 File cấu hình API Key (Gemini, OpenAI, Anthropic, Mock)
-├── 📄 requirements.txt          <-- 📦 Thư viện Python tương thích đa nền tảng
-│
-├── 📁 config/
-│   ├── 📄 test_cases.example.json <-- 🟢 Mẫu Bộ 5 Test Cases (Copy thành test_cases.json)
-│   └── 📄 test_cases.json         <-- 🟢 Bộ 5 Test Cases tùy biến theo đề tài của bạn
-│
-├── 📁 src/                      <-- 💻 MÃ NGUỒN PYTHON
-│   ├── 📄 mcp_server.py         <-- 🌐 MCP Server quản lý Tool Registry & JSON-RPC Dispatcher
-│   ├── 📄 tools.py              <-- 🛠️ Backend Tool Schemas JSON & Execution Layer
-│   ├── 📄 prompts.py            <-- 🛡️ System Prompts cho Chatbot và ReAct Agent
-│   ├── 📄 providers.py          <-- 🔌 Multi-Provider LLM Adapter (Gemini/OpenAI/Mock)
-│   ├── 📄 app.py                <-- 🚀 MCP Client & Core Agent App ghép nối ReAct Loop & Trace Log
-│   └── 📁 ai_levels/            <-- 📚 [REFERENCE ONLY] Code mẫu kiến trúc tham khảo (Không sửa/debug)
-│       └── 📄 README.md         <-- ⚠️ Chú thích mã nguồn tham khảo
-│
-└── 📁 docs/                     <-- 📚 TÀI LIỆU HƯỚNG DẪN CHUẨN VLEARN CODELAB
-    ├── 📄 DANH_SACH_DE_TAI.md    <-- 💡 Gợi ý chủ đề theo Lĩnh vực & Đề tài Mở
-    ├── 📄 CODELAB.md            <-- 🎓 [BƯỚC 2 - TRỌNG TÂM] Hướng dẫn Codelab thực hành theo checklist
-    └── 📄 trace_eval.md          <-- 📊 [BƯỚC 3] File Báo cáo Nộp bài duy nhất (Submission Report Artifact)
+```mermaid
+flowchart LR
+    Q[Câu hỏi] --> L[LLM với lịch sử hội thoại]
+    L --> D{Tool call?}
+    D -->|Có| M[MCP simulator kiểm tra và thực thi]
+    M --> O[Observation gắn đúng call ID]
+    O --> L
+    D -->|Không| F[Câu trả lời cuối]
 ```
 
----
+TC04 bắt buộc hai hành động phụ thuộc nhau: tra `SV2026002`, nhận cố vấn **TS. Lê Thị B**,
+rồi đặt lịch với cố vấn đó ở lượt LLM kế tiếp. TC05 kiểm tra nhánh `NOT_FOUND` và không đặt lịch.
+Baseline chỉ sinh text, nói rõ không truy cập được hồ sơ hay thực hiện đặt lịch.
 
-## 💯 6. THANG ĐIỂM ĐÁNH GIÁ (SCORING RUBRIC 100%)
+`thought` trong log là **tóm tắt quyết định quan sát được do ứng dụng tạo**,
+đánh dấu `thought_source=application_summary`; không phải suy luận nội bộ của mô hình.
+Trace đo riêng thời gian LLM và công cụ bằng đồng hồ monotonic; không gán latency mẫu.
+Xem [cách đọc trace](docs/TRACE_FORMAT.md) và [checklist gốc](docs/CODELAB.md).
 
-| Tiêu chí | Trọng số | Mô tả chi tiết | Bằng chứng kiểm tra (Artifacts) |
-| :--- | :---: | :--- | :--- |
-| **1. Agentic Fit & Tool Specs** | **25%** | Phân tích đúng 4 tiêu chí Agentic Fit. Khai báo Tool Schema chuẩn JSON Schema. | Bảng Scoring Matrix (`docs/trace_eval.md`) + `config/test_cases.json`. |
-| **2. ReAct Loop & MCP Integration** | **35%** | Vòng lặp ReAct chạy mượt mà qua Native Tool Calling & MCP Server **trên LLM API thật (Gemini/OpenAI)**. | Code trong `src/mcp_server.py` + `src/tools.py` + `src/app.py` + Log API thật. |
-| **3. Waterfall Trace & Observation** | **25%** | File log `trace_waterfall.json` trích xuất đầy đủ chuỗi suy luận Thought $\rightarrow$ Action $\rightarrow$ Observation. | File log `docs/trace_waterfall.json` + `docs/trace_eval.md`. |
-| **4. Git Repository & Submission** | **15%** | Cấu trúc Repo sạch sẽ, commit chuẩn chỉ và nộp đúng hạn trên LMS VLearn. | Link Repo GitHub cá nhân. |
+## Phạm vi mô phỏng
+
+LLM có thể là API thật nhưng hồ sơ và lịch hẹn vẫn là dữ liệu thử nghiệm từ starter.
+Đây là MCP simulator trong cùng tiến trình, chưa phải MCP SDK server triển khai đầy đủ
+qua stdio/HTTP. Sổ lịch nằm trong RAM, được khởi tạo lại khi chạy mới; đặt lại cùng nội dung
+trong một phiên trả cùng booking ID. Không có đồng bộ lịch thật, xác thực sinh viên hay quy chế
+VinUni chính thức. Phần `src/ai_levels/` là mã tham khảo nguyên bản.
+
+Kiểm thử tự động xác minh công cụ, tham số, thứ tự lượt, trạng thái và vài đoạn thông tin
+trong câu trả lời. Cần đọc lại câu trả lời trong log để đánh giá chất lượng ngôn ngữ và đầy đủ ý.
+
+## Nộp bài
+
+Sau khi `--require-live` đạt 5/5 và báo cáo có trích đoạn API thật, commit/push mã nguồn,
+`config/test_cases.json`, trace và báo cáo lên repo cá nhân. Dán link repo vào LMS VLearn.
+Không đánh dấu đã nộp LMS trước khi thực hiện bước này.
+
+Tài liệu API đối chiếu: [OpenAI Function calling](https://developers.openai.com/api/docs/guides/function-calling),
+[Gemini Thought signatures](https://ai.google.dev/gemini-api/docs/generate-content/thought-signatures).

@@ -1,4 +1,44 @@
-# Báo cáo Bài Lab 3 — Chatbot vs ReAct Agent
+"""Build an evidence-based Vietnamese report from the actual saved run, without API calls."""
+import argparse
+import json
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+
+
+def build_report(trace_path):
+    trace_path = Path(trace_path)
+    logs = json.loads(trace_path.read_text(encoding="utf-8-sig"))
+    summary_path = trace_path.with_name(trace_path.stem + ".eval.json")
+    summary = json.loads(summary_path.read_text(encoding="utf-8-sig"))
+    run_ids = list(dict.fromkeys(row["run_id"] for row in logs))
+    if summary.get("run_ids") != run_ids:
+        raise ValueError("Trace and evaluation belong to different runs. Run the full suite again.")
+    if any(row["is_mock"] != summary["is_mock"] or row["provider"] != summary["provider"] for row in logs):
+        raise ValueError("Trace provenance does not match the evaluation.")
+    is_mock = summary["is_mock"]
+    mode = "OFFLINE MOCK — chưa nghiệm thu API thật" if is_mock else "LLM API thật"
+    tools = [row for row in logs if row["action_type"] == "TOOL_EXECUTION"]
+    excerpt = [row for row in logs if row["test_case_id"] == "TC04" and row["action_type"] in ("TOOL_EXECUTION", "FINAL_ANSWER")]
+    # Project fields from the recorded events; no synthesized results or latencies.
+    fields = ("step", "provider", "model", "is_mock", "action_type", "tool_name", "arguments", "observation", "output", "latency_ms")
+    excerpt = [{key: row[key] for key in fields if key in row} for row in excerpt]
+    table = "\n".join(
+        f"| {row['test_case_id']} | {'PASS' if row['passed'] else 'FAIL'} | {' → '.join(row['tool_sequence']) or 'Không gọi tool'} | {row['llm_turns']} | {row['latency_ms']:.3f} |"
+        for row in summary["cases"]
+    )
+    failures = "\n".join(f"- {row['test_case_id']}: {'; '.join(row['failures'])}" for row in summary["cases"] if row["failures"])
+    baseline_path = trace_path.with_name(trace_path.stem + ".baseline.json")
+    baseline_note = "Chưa có kết quả chạy baseline đi kèm lần nghiệm thu này."
+    if baseline_path.exists():
+        baseline = json.loads(baseline_path.read_text(encoding="utf-8-sig"))
+        baseline_note = (f"Đã chạy Chatbot Baseline trên cùng {len(baseline)} câu hỏi; "
+                         f"{sum(row['status'] == 'COMPLETED' for row in baseline)} phản hồi hoàn tất, "
+                         f"{sum(row['tool_count'] for row in baseline)} lượt tool. "
+                         f"Bằng chứng: [{baseline_path.name}]({baseline_path.name}).")
+    live_pass = summary["live_acceptance_passed"]
+    checked = "x" if live_pass else " "
+    report = f"""# Báo cáo Bài Lab 3 — Chatbot vs ReAct Agent
 
 **Họ và tên:** Phạm Minh Cương<br>
 **Mã học viên:** 2A202602825<br>
@@ -32,26 +72,22 @@
 
 ## 3. Kết quả nghiệm thu từ file thực thi
 
-**Trạng thái:** OFFLINE MOCK — chưa nghiệm thu API thật<br>
-**Provider / model:** `mock` / `offline-scripted-lab-v1`<br>
-**Thời điểm sinh tổng kết (UTC):** `2026-09-13T03:05:57.594559+00:00`<br>
-**Test cases đạt điều kiện tự động:** 5/5<br>
-**Tổng lượt tool:** 5; trong đó SUCCESS: 4, NOT_FOUND: 1.
+**Trạng thái:** {mode}<br>
+**Provider / model:** `{summary['provider']}` / `{summary['model']}`<br>
+**Thời điểm sinh tổng kết (UTC):** `{summary['generated_at']}`<br>
+**Test cases đạt điều kiện tự động:** {summary['passed']}/{summary['total']}<br>
+**Tổng lượt tool:** {len(tools)}; trong đó SUCCESS: {sum(row['observation'].get('status') == 'SUCCESS' for row in tools)}, NOT_FOUND: {sum(row['observation'].get('status') == 'NOT_FOUND' for row in tools)}.
 
 | Test | Kết quả | Chuỗi công cụ | Lượt LLM | Thời gian sự kiện (ms) |
 | --- | --- | --- | ---: | ---: |
-| TC01 | PASS | Không gọi tool | 1 | 0.177 |
-| TC02 | PASS | academic_query | 2 | 0.299 |
-| TC03 | PASS | schedule_appointment | 2 | 3.441 |
-| TC04 | PASS | academic_query → schedule_appointment | 3 | 0.347 |
-| TC05 | PASS | academic_query | 2 | 0.210 |
+{table}
 
-Không có assertion thất bại trong lần chạy này.
+{failures or 'Không có assertion thất bại trong lần chạy này.'}
 
-Bằng chứng: [trace_waterfall.mock.json](trace_waterfall.mock.json), [trace_waterfall.mock.eval.json](trace_waterfall.mock.eval.json).
-**Log mock chỉ chứng minh luồng phần mềm; chưa chứng minh Native Tool Calling với LLM thật. Cần chạy `--all --require-live --compare` sau khi cấu hình API để sinh `docs/trace_waterfall.json`.**
+Bằng chứng: [{trace_path.name}]({trace_path.name}), [{summary_path.name}]({summary_path.name}).
+{'**Log mock chỉ chứng minh luồng phần mềm; chưa chứng minh Native Tool Calling với LLM thật. Cần chạy `--all --require-live --compare` sau khi cấu hình API để sinh `docs/trace_waterfall.json`.**' if is_mock else 'Trace trên lấy từ API thật; công cụ và hồ sơ vẫn là dữ liệu mô phỏng của bài lab.'}
 
-Đã chạy Chatbot Baseline trên cùng 5 câu hỏi; 5 phản hồi hoàn tất, 0 lượt tool. Bằng chứng: [trace_waterfall.mock.baseline.json](trace_waterfall.mock.baseline.json).
+{baseline_note}
 
 Baseline không thể tra hồ sơ hay thực hiện đặt lịch. Agent thực hiện được qua tool,
 đổi lại cần thêm lượt LLM và thời gian API. PASS tự động kiểm tra tên tool, tham số,
@@ -63,67 +99,7 @@ không thay thế hoàn toàn đánh giá chất lượng ngôn ngữ bởi ngư
 Trích các trường từ sự kiện đã lưu, giữ nguyên dữ liệu và thời gian đo được:
 
 ```json
-[
-  {
-    "step": 1,
-    "provider": "mock",
-    "model": "offline-scripted-lab-v1",
-    "is_mock": true,
-    "action_type": "TOOL_EXECUTION",
-    "tool_name": "academic_query",
-    "arguments": {
-      "student_id": "SV2026002"
-    },
-    "observation": {
-      "simulated": true,
-      "status": "SUCCESS",
-      "student_id": "SV2026002",
-      "data": {
-        "full_name": "Trần Thị Bình",
-        "class": "AI-K4",
-        "gpa": 3.6,
-        "email": "binh.tt@vinuni.edu.vn",
-        "status": "Đang học",
-        "advisor": "TS. Lê Thị B"
-      }
-    },
-    "latency_ms": 0.104
-  },
-  {
-    "step": 2,
-    "provider": "mock",
-    "model": "offline-scripted-lab-v1",
-    "is_mock": true,
-    "action_type": "TOOL_EXECUTION",
-    "tool_name": "schedule_appointment",
-    "arguments": {
-      "student_id": "SV2026002",
-      "datetime_str": "09:30 16/09/2026",
-      "advisor_name": "TS. Lê Thị B"
-    },
-    "observation": {
-      "status": "SUCCESS",
-      "simulated": true,
-      "booking_id": "BK-6B265240CFEC",
-      "student_id": "SV2026002",
-      "datetime": "09:30 16/09/2026",
-      "timezone": "UTC+07:00",
-      "advisor": "TS. Lê Thị B",
-      "already_booked": false,
-      "message": "Đặt lịch mô phỏng thành công cho SV2026002 với TS. Lê Thị B vào 09:30 16/09/2026 (UTC+07:00)."
-    },
-    "latency_ms": 0.138
-  },
-  {
-    "step": 3,
-    "provider": "mock",
-    "model": "offline-scripted-lab-v1",
-    "is_mock": true,
-    "action_type": "FINAL_ANSWER",
-    "output": "[MOCK] Đặt lịch mô phỏng thành công cho SV2026002 với TS. Lê Thị B vào 09:30 16/09/2026 (UTC+07:00). Mã đặt lịch: BK-6B265240CFEC Hồ sơ mô phỏng: Trần Thị Bình, GPA 3.6.",
-    "latency_ms": 0.002
-  }
-]
+{json.dumps(excerpt, ensure_ascii=False, indent=2)}
 ```
 
 `thought` ở sự kiện LLM_DECISION là tóm tắt quyết định do ứng dụng tạo
@@ -136,7 +112,7 @@ nên thường gần 0 ms. Xem [định dạng trace](TRACE_FORMAT.md).
 - [x] Fork đúng starter K4A, tên repo theo họ tên/mã học viên.
 - [x] Hoàn thiện 5 câu hỏi TC01–TC05 và hai tool schemas.
 - [x] Kiểm thử offline vòng lặp, nhiều tool calls, giữ native IDs/signatures, lỗi JSON/tool/API, giới hạn vòng lặp, UTF-8 và idempotency.
-- [ ] Nghiệm thu API thật đạt 5/5 test cases; có trace thật tại `docs/trace_waterfall.json`.
+- [{checked}] Nghiệm thu API thật đạt 5/5 test cases; có trace thật tại `docs/trace_waterfall.json`.
 - [ ] Nộp URL repository vào LMS VLearn (thao tác của học viên, chưa xác minh).
 
 Bộ regression: `python -m unittest discover -s tests -v`. Kết quả kiểm thử gần nhất
@@ -150,3 +126,17 @@ Không suy rộng ngưỡng tín chỉ/GPA thành quy chế VinUni khi chưa có
 - [Starter K4A](https://github.com/VinUni-AI20k/K4A-Day03-Lab-Chatbot-vs-ReAct-Agent-MCP) và [CODELAB gốc](CODELAB.md).
 - [OpenAI Function calling](https://developers.openai.com/api/docs/guides/function-calling): trả tool output đúng call_id và gọi LLM tiếp.
 - [Gemini Thought signatures](https://ai.google.dev/gemini-api/docs/generate-content/thought-signatures): giữ nguyên Content model trong lịch sử qua các bước.
+"""
+    target = ROOT / "docs/trace_eval.md"
+    target.write_text(report, encoding="utf-8")
+    print(f"Report: {target}; mock={is_mock}; live_pass={live_pass}")
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Generate the lab report from saved trace evidence")
+    parser.add_argument("--trace", type=Path)
+    args = parser.parse_args()
+    path = args.trace or ROOT / "docs/trace_waterfall.json"
+    if not path.exists() and args.trace is None:
+        path = ROOT / "docs/trace_waterfall.mock.json"
+    build_report(path)

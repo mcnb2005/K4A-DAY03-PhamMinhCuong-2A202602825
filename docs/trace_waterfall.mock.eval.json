@@ -1,0 +1,73 @@
+{
+  "provider": "mock",
+  "model": "offline-scripted-lab-v1",
+  "is_mock": true,
+  "generated_at": "2026-09-13T03:05:57.594559+00:00",
+  "run_ids": [
+    "bcc37792ef06437c8d14e6717b987e4b",
+    "6b9ed74cefc44018935830ad3b3c2087",
+    "362a61a82b454fedb702951948757eee",
+    "61ea12cd0098496ca1aa02fbf2469bcd",
+    "7d0a1bd1a6884e49a8964c2e741f041b"
+  ],
+  "passed": 5,
+  "total": 5,
+  "tool_calls": 5,
+  "cases": [
+    {
+      "test_case_id": "TC01",
+      "passed": true,
+      "failures": [],
+      "tool_sequence": [],
+      "tool_count": 0,
+      "llm_turns": 1,
+      "latency_ms": 0.177
+    },
+    {
+      "test_case_id": "TC02",
+      "passed": true,
+      "failures": [],
+      "tool_sequence": [
+        "academic_query"
+      ],
+      "tool_count": 1,
+      "llm_turns": 2,
+      "latency_ms": 0.299
+    },
+    {
+      "test_case_id": "TC03",
+      "passed": true,
+      "failures": [],
+      "tool_sequence": [
+        "schedule_appointment"
+      ],
+      "tool_count": 1,
+      "llm_turns": 2,
+      "latency_ms": 3.441
+    },
+    {
+      "test_case_id": "TC04",
+      "passed": true,
+      "failures": [],
+      "tool_sequence": [
+        "academic_query",
+        "schedule_appointment"
+      ],
+      "tool_count": 2,
+      "llm_turns": 3,
+      "latency_ms": 0.347
+    },
+    {
+      "test_case_id": "TC05",
+      "passed": true,
+      "failures": [],
+      "tool_sequence": [
+        "academic_query"
+      ],
+      "tool_count": 1,
+      "llm_turns": 2,
+      "latency_ms": 0.21
+    }
+  ],
+  "live_acceptance_passed": false
+}
